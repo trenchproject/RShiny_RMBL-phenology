@@ -1,12 +1,20 @@
-phen <- read_excel("phenology.xlsx", col_types = "numeric") %>% as.data.frame()
+# phen <- read_excel("phenology.xlsx", col_types = "numeric") %>% as.data.frame()
+# colnames(phen) <- c("Year", "melt", "snowfall", "snowpack", "marmot", "chipmunk", "robin", "jay", "blackbird", "junco", "flicker", "Fswallow", "sapsucker", "Fsparrow", "kinglet", 
+#                     "Y-rwarbler", "Cswallow", "squirrel", "hummingbird", "Wsparrow", "cowbird", "bluebird", "Ywarbler", "bluebell", "lily", "beauty")
+# write.csv(phen, "phenology.csv", row.names = F)
+# weather <- read_excel("weather.xls", col_types = "numeric") %>% as.data.frame()
+# colnames(weather) <- c("mdy", "year", "month", "day", "mintemp", "maxtemp", "new", "meltin", "meltmm", "total", "pack", "rainin", "rainmm")
+# write.csv(weather, "weather.csv", row.names = F)
 
+phen <- read.csv("phenology.csv")
+weather <- read.csv("weather.csv")
 snow <- c("Snow melt date (JD)" = "melt", "Annual snowfall (cm)" = "snowfall", "Average snowpack (cm)" = "snowpack")
+
 species <- c("Yellow-bellied marmot", "Least chipmunk", "American robin", "Steller's jay", 
              "Red-winged blackbird", "Dark-eyed junco", "Northern flicker", "Tree swallow", "Red-naped sapsucker", "Fox sparrow", "Ruby-crowned kinglet", 
              "Yellow-rumped warbler", "Cliff swallow", "Golden-mantled ground squirrel", "Broad-tailed hummingbird", "White-crowned sparrow", 
              "Brown-headed cowbird", "Mountain bluebird", "Yellow warbler", "Tall-fringed bluebell", "Glacier lily", "Western spring beauty")
-colnames(phen) <- c("Year", "melt", "snowfall", "snowpack", "marmot", "chipmunk", "robin", "jay", "blackbird", "junco", "flicker", "Fswallow", "sapsucker", "Fsparrow", "kinglet", 
-                     "Y-rwarbler", "Cswallow", "squirrel", "hummingbird", "Wsparrow", "cowbird", "bluebird", "Ywarbler", "bluebell", "lily", "beauty")
+vars <- c("Minimum temperature (°C)" = "mintemp", "Maximum temperature (°C)", "Melt water (mm)" = "meltmm", "Total snow (cm)" = "total", "Snow pack (cm)" = "pack", "Rainfall (mm)")
 
 d_x <- vector()
 d_y <- vector()
@@ -146,14 +154,7 @@ shinyServer <- function(input, output, session) {
       phen <- phen[phen$Year >= 2000,]
     }
     spVar <- colnames(phen)[which(species %in% input$species) + 4]
-    
-    if (input$snow == "Snow melt date") {
-      snowVar <- "melt"
-    } else if (input$snow == "Annual snowfall (cm)") {
-      snowVar <- "snowfall"
-    } else {
-      snowVar <- "snowpack"
-    }
+    snowVar <- snow[input$snow]
     
     trend <- ""
     if (input$trend) {
@@ -175,13 +176,13 @@ shinyServer <- function(input, output, session) {
     snowR <- ifelse(input$snow != "" && input$trend, 
                     paste("<br><b style = 'color:blue;'>Snow conditions</b>
                           <br>Slope:", round(as.numeric(fit_snow$coefficients[2]), digits = 2), 
-                          "<br>p-value:", round(summary(fit_snow)$coefficients[2,4], digits = 3),
-                          "<br>R<sup>2</sup>:", round(summary(fit_snow)$r.squared, digits = 3)), "")
+                          "<br>p-value:", signif(summary(fit_snow)$coefficients[2,4], digits = 2),
+                          "<br>R<sup>2</sup>:", signif(summary(fit_snow)$r.squared, digits = 2)), "")
     speciesR <- ifelse(input$species != "" && input$trend, 
                        paste("<br><b style = 'color:green;'>Species</b>
                              <br>Slope:", round(as.numeric(fit_sp$coefficients[2]), digits = 2), 
-                             "<br>p-value:", round(summary(fit_sp)$coefficients[2,4], digits = 3),
-                             "<br>R<sup>2</sup>:", round(summary(fit_sp)$r.squared, digits = 3)), "")
+                             "<br>p-value:", signif(summary(fit_sp)$coefficients[2,4], digits = 2),
+                             "<br>R<sup>2</sup>:", signif(summary(fit_sp)$r.squared, digits = 2)), "")
     HTML(trend, snowR, speciesR)
   })
   
@@ -246,7 +247,70 @@ shinyServer <- function(input, output, session) {
   
   #Plot 2
   output$plot2 <- renderPlotly({
-    plot_ly(x = ~phen)
+    snowVar <- snow[input$snow2]
+    spVar <- colnames(phen)[which(species %in% "Yellow-bellied marmot") + 4]  # + 4 because the data set has 4 columns in the beginning that are year and snow conditions.
+    
+    p2 <- plot_ly() %>%
+      add_markers(x = ~phen[, snowVar], y = ~phen[, spVar], name = "species", showlegend = F) %>%
+      layout(xaxis = list(title = input$snow2),
+             yaxis = list(title = paste(input$species2, "(JD)"))
+             )
+    
+    if (input$trend2) {
+      subset <- phen[c(snowVar, spVar)] %>%
+        filter(!is.na(phen[spVar]))
+      subset <- filter(subset, !is.na(subset[snowVar]))
+      fit <- lm(subset[,2] ~ subset[,1])
+      p2 <- p2 %>% add_lines(data = subset, x = ~subset[, snowVar], y = ~fitted(fit), name = "Trend line", mode = "lines", line = list(color = "green"))
+    }
+    p2
+  })
+  
+  output$stats2 <- renderText({
+    spVar <- colnames(phen)[which(species %in% input$species2) + 4]
+    print(spVar)
+    snowVar <- snow[input$snow2]
+    print(snowVar)
+    if (input$trend2) {
+      subset <- phen[c(snowVar, spVar)] %>%
+        filter(!is.na(phen[spVar]))
+      subset <- filter(subset, !is.na(subset[snowVar]))
+      fit <- lm(subset[,2] ~ subset[,1])
+    
+    pval <- signif(summary(fit)$coefficients[2,4], digits = 2)
+    if (pval < 0.05) {
+      pval <- paste("<b style = 'color:red;'>", pval, "</b>")
+    }
+
+    HTML("<b>Trend line analysis</b>
+         <br>Slope:", round(as.numeric(fit$coefficients[2]), digits = 2), 
+         "<br>p-value:", pval,
+         "<br>R<sup>2</sup>:", signif(summary(fit)$r.squared, digits = 2))
+    }
+  })
+  
+  
+  #_____________________________________________________________________________
+  
+  output$plot3 <- renderPlotly({
+    weatherVar <- vars[input$weather]
+    spVar <- colnames(phen)[which(species %in% input$species3) + 4]  # + 4 because the data set has 4 columns in the beginning that are year and snow conditions.
+    
+    
+    p3 <- plot_ly() %>%
+      add_markers(x = ~phen[, weatherVar], y = ~phen[, spVar], name = "species", showlegend = F) %>%
+      layout(xaxis = list(title = input$snow2),
+             yaxis = list(title = paste(input$species2, "(JD)"))
+      )
+    
+    if (input$trend2) {
+      subset <- phen[c(snowVar, spVar)] %>%
+        filter(!is.na(phen[spVar]))
+      subset <- filter(subset, !is.na(subset[snowVar]))
+      fit <- lm(subset[,2] ~ subset[,1])
+      p2 <- p2 %>% add_lines(data = subset, x = ~subset[, snowVar], y = ~fitted(fit), name = "Trend line", mode = "lines", line = list(color = "green"))
+    }
+    p2
   })
   
 }
