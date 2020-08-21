@@ -10,7 +10,7 @@ species <- c("Yellow-bellied marmot", "Least chipmunk", "American robin", "Stell
              "Red-winged blackbird", "Dark-eyed junco", "Northern flicker", "Tree swallow", "Red-naped sapsucker", "Fox sparrow", "Ruby-crowned kinglet", 
              "Yellow-rumped warbler", "Cliff swallow", "Golden-mantled ground squirrel", "Broad-tailed hummingbird", "White-crowned sparrow", 
              "Brown-headed cowbird", "Mountain bluebird", "Yellow warbler", "Tall-fringed bluebell", "Glacier lily", "Western spring beauty")
-vars <- c("Minimum temperature (°C)", "Maximum temperature (°C)", "Melt water (mm)", "Total snow (cm)", "Snow pack (cm)", "Rainfall (mm)")
+#vars <- c("Minimum temperature (°C)", "Maximum temperature (°C)", "Melt water (mm)", "Total snow (cm)", "Snow pack (cm)", "Rainfall (mm)")
 shinyUI <- fluidPage(
   theme = shinytheme("united"),
   setBackgroundColor(color = "#F5F5F5"), 
@@ -24,7 +24,7 @@ shinyUI <- fluidPage(
             sidebarLayout(
               sidebarPanel(
                 selectInput("period", "Period", c("1970-1999", "2000-2010", "1970-2010")),
-                pickerInput("snow", "Snow", choices = c("", "Snow melt date (JD)", "Annual snowfall (cm)", "Average snowpack (cm)"), 
+                pickerInput("snow", "Snow", choices = c("", "Snow melt date (JD)", "Annual snowfall (cm)", "Average snowpack (cm)", "Melt water equivalent (mm)"), 
                               options = list(style = "btn-success"), selected = "Snow melt date (JD)"),
                 pickerInput("species", "Species", choices = c("", list("Hibernating animals" = species[c(1,2)], 
                                                                        "Migratory animals" = species[3:19],
@@ -52,7 +52,7 @@ shinyUI <- fluidPage(
     tabPanel("snow vs species",
              sidebarLayout(
                sidebarPanel(
-                 pickerInput("snow2", "Snow", choices = c("Snow melt date (JD)", "Annual snowfall (cm)", "Average snowpack (cm)"), 
+                 pickerInput("snow2", "Snow", choices = c("Snow melt date (JD)", "Annual snowfall (cm)", "Average snowpack (cm)", "Melt water equivalent (mm)"), 
                              options = list(style = "btn-success"), selected = "Snow melt date (JD)"),
                  pickerInput("species2", "Species", choices = list("Hibernating animals" = species[c(1,2)], 
                                                                         "Migratory animals" = species[3:19],

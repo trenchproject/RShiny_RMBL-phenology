@@ -1,20 +1,27 @@
 # phen <- read_excel("phenology.xlsx", col_types = "numeric") %>% as.data.frame()
 # colnames(phen) <- c("Year", "melt", "snowfall", "snowpack", "marmot", "chipmunk", "robin", "jay", "blackbird", "junco", "flicker", "Fswallow", "sapsucker", "Fsparrow", "kinglet", 
 #                     "Y-rwarbler", "Cswallow", "squirrel", "hummingbird", "Wsparrow", "cowbird", "bluebird", "Ywarbler", "bluebell", "lily", "beauty")
+# for(yr in rev(unique(weather$year))) {
+#   water <- c(water, mean(rbind(subset(weather, year == yr & month > 8),
+#                                subset(weather, year == yr + 1 & month < 9))[,"meltmm"], na.rm = T))
+# }
+# water[1] <- NA
+# water <- c(water, NA)
+# phen <- cbind(phen, water)
 # write.csv(phen, "phenology.csv", row.names = F)
 # weather <- read_excel("weather.xls", col_types = "numeric") %>% as.data.frame()
 # colnames(weather) <- c("mdy", "year", "month", "day", "mintemp", "maxtemp", "new", "meltin", "meltmm", "total", "pack", "rainin", "rainmm")
 # write.csv(weather, "weather.csv", row.names = F)
 
 phen <- read.csv("phenology.csv")
-weather <- read.csv("weather.csv")
-snow <- c("Snow melt date (JD)" = "melt", "Annual snowfall (cm)" = "snowfall", "Average snowpack (cm)" = "snowpack")
+#weather <- read.csv("weather.csv")
+snow <- c("Snow melt date (JD)" = "melt", "Annual snowfall (cm)" = "snowfall", "Average snowpack (cm)" = "snowpack", "Melt water equivalent (mm)" = "water")
 
 species <- c("Yellow-bellied marmot", "Least chipmunk", "American robin", "Steller's jay", 
              "Red-winged blackbird", "Dark-eyed junco", "Northern flicker", "Tree swallow", "Red-naped sapsucker", "Fox sparrow", "Ruby-crowned kinglet", 
              "Yellow-rumped warbler", "Cliff swallow", "Golden-mantled ground squirrel", "Broad-tailed hummingbird", "White-crowned sparrow", 
              "Brown-headed cowbird", "Mountain bluebird", "Yellow warbler", "Tall-fringed bluebell", "Glacier lily", "Western spring beauty")
-vars <- c("Minimum temperature (°C)" = "mintemp", "Maximum temperature (°C)", "Melt water (mm)" = "meltmm", "Total snow (cm)" = "total", "Snow pack (cm)" = "pack", "Rainfall (mm)")
+#vars <- c("Minimum temperature (°C)" = "mintemp", "Maximum temperature (°C)", "Melt water (mm)" = "meltmm", "Total snow (cm)" = "total", "Snow pack (cm)" = "pack", "Rainfall (mm)")
 
 d_x <- vector()
 d_y <- vector()
@@ -248,7 +255,7 @@ shinyServer <- function(input, output, session) {
   #Plot 2
   output$plot2 <- renderPlotly({
     snowVar <- snow[input$snow2]
-    spVar <- colnames(phen)[which(species %in% "Yellow-bellied marmot") + 4]  # + 4 because the data set has 4 columns in the beginning that are year and snow conditions.
+    spVar <- colnames(phen)[which(species %in% input$species2) + 4]  # + 4 because the data set has 4 columns in the beginning that are year and snow conditions.
     
     p2 <- plot_ly() %>%
       add_markers(x = ~phen[, snowVar], y = ~phen[, spVar], name = "species", showlegend = F) %>%
@@ -268,9 +275,7 @@ shinyServer <- function(input, output, session) {
   
   output$stats2 <- renderText({
     spVar <- colnames(phen)[which(species %in% input$species2) + 4]
-    print(spVar)
     snowVar <- snow[input$snow2]
-    print(snowVar)
     if (input$trend2) {
       subset <- phen[c(snowVar, spVar)] %>%
         filter(!is.na(phen[spVar]))
