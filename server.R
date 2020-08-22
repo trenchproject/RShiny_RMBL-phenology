@@ -1,27 +1,16 @@
-# phen <- read_excel("phenology.xlsx", col_types = "numeric") %>% as.data.frame()
-# colnames(phen) <- c("Year", "melt", "snowfall", "snowpack", "marmot", "chipmunk", "robin", "jay", "blackbird", "junco", "flicker", "Fswallow", "sapsucker", "Fsparrow", "kinglet", 
-#                     "Y-rwarbler", "Cswallow", "squirrel", "hummingbird", "Wsparrow", "cowbird", "bluebird", "Ywarbler", "bluebell", "lily", "beauty")
-# for(yr in rev(unique(weather$year))) {
-#   water <- c(water, mean(rbind(subset(weather, year == yr & month > 8),
-#                                subset(weather, year == yr + 1 & month < 9))[,"meltmm"], na.rm = T))
-# }
-# water[1] <- NA
-# water <- c(water, NA)
-# phen <- cbind(phen, water)
-# write.csv(phen, "phenology.csv", row.names = F)
 # weather <- read_excel("weather.xls", col_types = "numeric") %>% as.data.frame()
 # colnames(weather) <- c("mdy", "year", "month", "day", "mintemp", "maxtemp", "new", "meltin", "meltmm", "total", "pack", "rainin", "rainmm")
 # write.csv(weather, "weather.csv", row.names = F)
 
 phen <- read.csv("phenology.csv")
 #weather <- read.csv("weather.csv")
-snow <- c("Snow melt date (JD)" = "melt", "Annual snowfall (cm)" = "snowfall", "Average snowpack (cm)" = "snowpack", "Melt water equivalent (mm)" = "water")
+snow <- c("Snow melt date (JD)" = "melt", "Annual snowfall (cm)" = "snowfall", "Average snowpack (cm)" = "snowpack")
 
 species <- c("Yellow-bellied marmot", "Least chipmunk", "American robin", "Steller's jay", 
              "Red-winged blackbird", "Dark-eyed junco", "Northern flicker", "Tree swallow", "Red-naped sapsucker", "Fox sparrow", "Ruby-crowned kinglet", 
              "Yellow-rumped warbler", "Cliff swallow", "Golden-mantled ground squirrel", "Broad-tailed hummingbird", "White-crowned sparrow", 
              "Brown-headed cowbird", "Mountain bluebird", "Yellow warbler", "Tall-fringed bluebell", "Glacier lily", "Western spring beauty")
-#vars <- c("Minimum temperature (°C)" = "mintemp", "Maximum temperature (°C)", "Melt water (mm)" = "meltmm", "Total snow (cm)" = "total", "Snow pack (cm)" = "pack", "Rainfall (mm)")
+vars <- c("Mean minimum April temperature (°C)" = "mins", "Mean maximum April temperature (°C)" = "maxes", "Melt water (mm)" = "water")
 
 d_x <- vector()
 d_y <- vector()
@@ -43,7 +32,7 @@ shinyServer <- function(input, output, session) {
     # This variable does nothing. Necessary so that the whole function renders when a change in reset is made.
     reset <- input$reset
     
-    if (input$period == "1970-1999") {
+    if (input$period == "1974-1999") {
       phen <- phen[phen$Year <= 1999,]
     } else if (input$period == "2000-2010") {
       phen <- phen[phen$Year >= 2000,]
@@ -101,7 +90,7 @@ shinyServer <- function(input, output, session) {
         }
       }
     }
-    if (input$period == "1970-2010") {
+    if (input$period == "1974-2010") {
       vline <- function(x) {
         list(
           type = "line", 
@@ -155,7 +144,7 @@ shinyServer <- function(input, output, session) {
 
   
   output$stats <- renderText({
-    if (input$period == "1970-1999") {
+    if (input$period == "1974-1999") {
       phen <- phen[phen$Year <= 1999,]
     } else if (input$period == "2000-2010") {
       phen <- phen[phen$Year >= 2000,]
@@ -198,6 +187,7 @@ shinyServer <- function(input, output, session) {
     reset <- input$reset
     snow <- input$snow
     spe <- input$species
+    per <- input$period
     
     d <- event_data("plotly_click")
 
@@ -244,6 +234,11 @@ shinyServer <- function(input, output, session) {
     final <<- final + 1
   })
   
+  # Same as above except that this is for the period selection.
+  observeEvent(input$period, {
+    final <<- final + 1
+  })
+  
   # Points and values are reset when the reset button is clicked.
   observeEvent(input$reset, {
     final <<- final + 1
@@ -251,11 +246,17 @@ shinyServer <- function(input, output, session) {
   
   
   #______________________________________________________________________________
-  
   #Plot 2
+  
   output$plot2 <- renderPlotly({
     snowVar <- snow[input$snow2]
     spVar <- colnames(phen)[which(species %in% input$species2) + 4]  # + 4 because the data set has 4 columns in the beginning that are year and snow conditions.
+    
+    if (input$period2 == "1974-1999") {
+      phen <- phen[phen$Year <= 1999,]
+    } else if (input$period2 == "2000-2010") {
+      phen <- phen[phen$Year >= 2000,]
+    }
     
     p2 <- plot_ly() %>%
       add_markers(x = ~phen[, snowVar], y = ~phen[, spVar], name = "species", showlegend = F) %>%
@@ -276,6 +277,13 @@ shinyServer <- function(input, output, session) {
   output$stats2 <- renderText({
     spVar <- colnames(phen)[which(species %in% input$species2) + 4]
     snowVar <- snow[input$snow2]
+    
+    if (input$period2 == "1974-1999") {
+      phen <- phen[phen$Year <= 1999,]
+    } else if (input$period2 == "2000-2010") {
+      phen <- phen[phen$Year >= 2000,]
+    }
+    
     if (input$trend2) {
       subset <- phen[c(snowVar, spVar)] %>%
         filter(!is.na(phen[spVar]))
@@ -296,26 +304,59 @@ shinyServer <- function(input, output, session) {
   
   
   #_____________________________________________________________________________
+  # Plot 3
   
   output$plot3 <- renderPlotly({
     weatherVar <- vars[input$weather]
     spVar <- colnames(phen)[which(species %in% input$species3) + 4]  # + 4 because the data set has 4 columns in the beginning that are year and snow conditions.
     
+    if (input$period3 == "1974-1999") {
+      phen <- phen[phen$Year <= 1999,]
+    } else if (input$period3 == "2000-2010") {
+      phen <- phen[phen$Year >= 2000,]
+    }
     
     p3 <- plot_ly() %>%
       add_markers(x = ~phen[, weatherVar], y = ~phen[, spVar], name = "species", showlegend = F) %>%
-      layout(xaxis = list(title = input$snow2),
-             yaxis = list(title = paste(input$species2, "(JD)"))
+      layout(xaxis = list(title = input$weather),
+             yaxis = list(title = paste(input$species3, "(JD)"))
       )
     
-    if (input$trend2) {
-      subset <- phen[c(snowVar, spVar)] %>%
+    if (input$trend3) {
+      subset <- phen[c(weatherVar, spVar)] %>%
         filter(!is.na(phen[spVar]))
-      subset <- filter(subset, !is.na(subset[snowVar]))
+      subset <- filter(subset, !is.na(subset[weatherVar]))
       fit <- lm(subset[,2] ~ subset[,1])
-      p2 <- p2 %>% add_lines(data = subset, x = ~subset[, snowVar], y = ~fitted(fit), name = "Trend line", mode = "lines", line = list(color = "green"))
+      p3 <- p3 %>% add_lines(data = subset, x = ~subset[, weatherVar], y = ~fitted(fit), name = "Trend line", mode = "lines", line = list(color = "green"))
     }
-    p2
+    p3
   })
   
+  output$stats3 <- renderText({
+    spVar <- colnames(phen)[which(species %in% input$species3) + 4]
+    weatherVar <- vars[input$weather]
+    
+    if (input$period3 == "1974-1999") {
+      phen <- phen[phen$Year <= 1999,]
+    } else if (input$period3 == "2000-2010") {
+      phen <- phen[phen$Year >= 2000,]
+    }
+    
+    if (input$trend3) {
+      subset <- phen[c(weatherVar, spVar)] %>%
+        filter(!is.na(phen[spVar]))
+      subset <- filter(subset, !is.na(subset[weatherVar]))
+      fit <- lm(subset[,2] ~ subset[,1])
+      
+      pval <- signif(summary(fit)$coefficients[2,4], digits = 2)
+      if (pval < 0.05) {
+        pval <- paste("<b style = 'color:red;'>", pval, "</b>")
+      }
+      
+      HTML("<b>Trend line analysis</b>
+         <br>Slope:", round(as.numeric(fit$coefficients[2]), digits = 2), 
+           "<br>p-value:", pval,
+           "<br>R<sup>2</sup>:", signif(summary(fit)$r.squared, digits = 2))
+    }
+  })
 }
