@@ -1,9 +1,5 @@
-# weather <- read_excel("weather.xls", col_types = "numeric") %>% as.data.frame()
-# colnames(weather) <- c("mdy", "year", "month", "day", "mintemp", "maxtemp", "new", "meltin", "meltmm", "total", "pack", "rainin", "rainmm")
-# write.csv(weather, "weather.csv", row.names = F)
-
 phen <- read.csv("phenology.csv")
-#weather <- read.csv("weather.csv")
+
 snow <- c("Snow melt date (JD)" = "melt", "Annual snowfall (cm)" = "snowfall", "Average snowpack (cm)" = "snowpack")
 
 species <- c("Yellow-bellied marmot", "Least chipmunk", "American robin", "Steller's jay", 

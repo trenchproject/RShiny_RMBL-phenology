@@ -2,6 +2,9 @@ phen <- read_excel("phenology.xlsx", col_types = "numeric") %>% as.data.frame()
 colnames(phen) <- c("Year", "melt", "snowfall", "snowpack", "marmot", "chipmunk", "robin", "jay", "blackbird", "junco", "flicker", "Fswallow", "sapsucker", "Fsparrow", "kinglet",
                     "Y-rwarbler", "Cswallow", "squirrel", "hummingbird", "Wsparrow", "cowbird", "bluebird", "Ywarbler", "bluebell", "lily", "beauty")
 
+weather <- read_excel("weather.xls", col_types = "numeric") %>% as.data.frame()
+colnames(weather) <- c("mdy", "year", "month", "day", "mintemp", "maxtemp", "new", "meltin", "meltmm", "total", "pack", "rainin", "rainmm")
+
 water <- c()
 for(yr in rev(unique(weather$year))) {
   water <- c(water, mean(rbind(subset(weather, year == yr & month > 8),
