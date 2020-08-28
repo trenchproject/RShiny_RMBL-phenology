@@ -41,11 +41,6 @@ shinyUI <- fluidPage(
                plotlyOutput("plot"),
                htmlOutput("stats"),
                br(),
-               strong("Click two points on the plot to see the rate of change"),
-               htmlOutput("clickData"),
-               br(),
-               bsButton("reset", "Reset points", style = "danger", size = "small"),
-               br(),
                hr()
               )
             )
