@@ -27,7 +27,7 @@ shinyUI <- fluidPage(
             sidebarLayout(
               sidebarPanel(
                 selectInput("period", "Period", c("1974-1999", "2000-2010", "1974-2010")),
-                pickerInput("snow", "Snow condition", choices = c("", "Snow melt date (JD)", "Annual snowfall (cm)", "Average snowpack (cm)", "Melt water equivalent (mm)"), 
+                pickerInput("snow", "Snow condition", choices = c("", "Snow melt date (JD)", "Annual snowfall (cm)", "Average snowpack (cm)"), 
                               options = list(style = "btn-success"), selected = "Snow melt date (JD)"),
                 pickerInput("species", "Organism", choices = c("", list("Hibernating animals" = species[c(1,2)], 
                                                                        "Migratory animals" = species[3:19],
@@ -50,7 +50,7 @@ shinyUI <- fluidPage(
              sidebarLayout(
                sidebarPanel(
                  selectInput("period2", "Period", c("1974-1999", "2000-2010", "1974-2010")),
-                 pickerInput("snow2", "Snow condition", choices = c("Snow melt date (JD)", "Annual snowfall (cm)", "Average snowpack (cm)", "Melt water equivalent (mm)"), 
+                 pickerInput("snow2", "Snow condition", choices = c("Snow melt date (JD)", "Annual snowfall (cm)", "Average snowpack (cm)"), 
                              options = list(style = "btn-success"), selected = "Snow melt date (JD)"),
                  pickerInput("species2", "Organism", choices = list("Hibernating animals" = species[c(1,2)], 
                                                                         "Migratory animals" = species[3:19],

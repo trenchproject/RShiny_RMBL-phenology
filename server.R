@@ -38,21 +38,22 @@ shinyServer <- function(input, output, session) {
     snowVar <- snow[input$snow]
     
     style <- ifelse(input$style == "Points", "markers", "lines")
-
+    
+    p <- plot_ly(x = ~phen$Year)
     if (input$snow != "" && input$species == "") {
-      p <- plot_ly(x = ~phen$Year) %>%
+      p <- p %>%
         add_trace(y = ~phen[,snowVar], name = "Snow conditions", type = "scatter", mode = style, marker = list(color = "blue")) %>%
         layout(xaxis = list(title = "Year"),
                yaxis = list(title = input$snow))
       
     } else if (input$snow == "" && input$species != "") {
-      p <- plot_ly(x = ~phen$Year) %>%
+      p <- p %>%
         add_trace(y = ~phen[,spVar], type = "scatter", mode = style, name = "Species", color = "green", connectgaps = TRUE, marker = list(color = "green")) %>%
         layout(xaxis = list(title = "Year"),
                yaxis = list(title = paste(input$species, "(JD)")))
 
     } else if (input$snow != "" && input$species != ""){
-      p <- plot_ly(x = ~phen$Year) %>%
+      p <- p %>%
         add_trace(y = ~phen[,spVar], name = "Species", customdata = colnames(phen[spVar])[1], type = "scatter", mode = style, connectgaps = TRUE, color = "green", marker = list(color = "green")) %>%
         add_trace(y = ~phen[,snowVar], name = "Snow conditions", customdata = colnames(phen[snowVar])[1], type = "scatter", mode = style, yaxis = "y2", color = "blue", marker = list(color = "blue")) %>%
         layout(xaxis = list(title = "Year"),
@@ -86,7 +87,7 @@ shinyServer <- function(input, output, session) {
         }
       }
     }
-    if (input$period == "1974-2010") {
+    if (input$period == "1974-2010") { # Add a vertical line at year = 2000
       vline <- function(x) {
         list(
           type = "line", 
