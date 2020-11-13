@@ -18,8 +18,18 @@ d_save_y <- vector()
 initial <- 0
 final <- 0
 
+
+guide <- Cicerone$
+  new()$
+  step(
+    "period",
+    "title here",
+    "Text here"
+  )
+
 shinyServer <- function(input, output, session) {
   
+  observeEvent(input$tour, guide$init()$start())
   
   output$plot <- renderPlotly({
     validate(

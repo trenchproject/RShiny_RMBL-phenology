@@ -1,3 +1,5 @@
+# remotes::install_github("ColinFay/glouton")
+
 library(shiny)
 library(shinythemes)
 library(shinyWidgets)
@@ -6,19 +8,37 @@ library(readxl)
 library(htmltools)
 library(shinyBS)
 library(magrittr)
+library(glouton)
+library(cicerone)
+
+
 species <- c("Yellow-bellied marmot", "Least chipmunk", "American robin", "Steller's jay", 
              "Red-winged blackbird", "Dark-eyed junco", "Northern flicker", "Tree swallow", "Red-naped sapsucker", "Fox sparrow", "Ruby-crowned kinglet", 
              "Yellow-rumped warbler", "Cliff swallow", "Golden-mantled ground squirrel", "Broad-tailed hummingbird", "White-crowned sparrow", 
              "Brown-headed cowbird", "Mountain bluebird", "Yellow warbler", "Tall-fringed bluebell", "Glacier lily", "Western spring beauty")
 vars <- c("Mean minimum April temperature (°C)", "Mean maximum April temperature (°C)", "Melt water (mm)")
 
+
+guide <- Cicerone$
+  new()$
+  step(
+    "period",
+    "title here",
+    "Text here"
+  )
+
+
 shinyUI <- fluidPage(
+  use_glouton(),
+  use_cicerone(),
+  
   theme = shinytheme("united"),
   setBackgroundColor(color = "#F5F5F5"), 
   titlePanel(
     "RMBL Phenology"
   ),
   includeHTML("intro.html"),
+  actionBttn("tour", "Take a Tour!", size = "sm", color = "success", block = TRUE),
   br(),
   br(),
   
