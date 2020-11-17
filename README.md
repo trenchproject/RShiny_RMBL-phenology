@@ -1,6 +1,6 @@
 # RShiny_RMBL-phenology
 
-RShiny_RMBL-phenology is an interactive shiny app that allows any user to visualize the relationships between climatic variables and phenology of hibernating species, migratory species, and some plant species. It is a modified version of a student activity on climate change and phenology developed by Wu. The original pdf file is [here](https://tiee.esa.org/vol/v13/issues/data_sets/wu/pdf/wu.pdf). The data are collected in Rocky Mountain Biological Laboratory in Colorado for over 30 years.
+RMBL-phenology is an interactive shiny app that allows any user to visualize the relationships between climatic variables and phenology of hibernating species, migratory species, and some plant species. It is a modified version of a student activity on climate change and phenology developed by Wu. The original pdf file is [here](https://tiee.esa.org/vol/v13/issues/data_sets/wu/pdf/wu.pdf). The data are collected in Rocky Mountain Biological Laboratory in Colorado for over 30 years.
 
 ## Prerequisites for opening in Rstudio
 Git and Rstudio ([Instructions](https://resources.github.com/whitepapers/github-and-rstudio/))  
@@ -18,7 +18,7 @@ lapply(pkgs, FUN = function(x) {
 devtools::install_github("AnalytixWare/ShinySky")
 ```
 
-## Using RShiny_RMBL-phenology
+## Using RMBL-phenology
 * Opening in Rstudio:  
 Click on "Code" on the top right to copy the link to this repository.  
 Click ```File```, ```New Project```, ```Version Control```, ```Git```  
@@ -28,9 +28,9 @@ Paste the repository URL and click ```Create Project```.
 
 We have a google doc with questions to guide through the app for further understanding of the topic.
 
-## Contributing to RShiny_RMBL-phenology
+## Contributing to RMBL-phenology
 <!--- If your README is long or you have some specific process or steps you want contributors to follow, consider creating a separate CONTRIBUTING.md file--->
-To contribute to RShiny_RMBL-phenology, follow these steps:
+To contribute to RMBL-phenology, follow these steps:
 
 1. Fork this repository.
 2. Create a branch: `git checkout -b <branch_name>`.
