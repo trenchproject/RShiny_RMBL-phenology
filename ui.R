@@ -38,7 +38,7 @@ shinyUI <- fluidPage(
   br(),
   
   div(id = "viz-wrapper",
-    tabsetPanel(
+    tabsetPanel(id = "tabs",
       tabPanel("vs. Year",
               sidebarLayout(
                 sidebarPanel(

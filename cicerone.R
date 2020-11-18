@@ -1,5 +1,3 @@
-library(cicerone)
-
 guide <- Cicerone$
   new()$
   step(
@@ -41,7 +39,7 @@ guide <- Cicerone$
                        The R<sup>2</sup> value shows us that only 0.35% of the variation in snow melt is explained by years.")
   )$
   step(
-    el = "viz-wrapper",
+    el = "tabs",
     title = "Next up...",
     description = HTML("Now, let's move on to the second tab. Click on <b>vs. snow conditions</b>")
   )$
@@ -64,7 +62,7 @@ guide <- Cicerone$
                   As much as 34% of the variation in Yellow-bellied marmots' sighting date is explained by the variation in the snow melt date as well."
   )$
   step(
-    el = "viz-wrapper",
+    el = "tabs",
     title = "Next up...",
     description = HTML("Now, let's look at the last tab. Click on <b>vs. other weather data</b>")
   )$
