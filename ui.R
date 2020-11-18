@@ -1,5 +1,4 @@
 # remotes::install_github("ColinFay/glouton")
-# devtools::install_github("AnalytixWare/ShinySky")
 
 library(shiny)
 library(shinythemes)
@@ -10,7 +9,6 @@ library(htmltools)
 library(magrittr)
 #library(glouton)
 library(cicerone)
-library(shinysky)
 
 species <- c("Yellow-bellied marmot", "Least chipmunk", "American robin", "Steller's jay", 
              "Red-winged blackbird", "Dark-eyed junco", "Northern flicker", "Tree swallow", "Red-naped sapsucker", "Fox sparrow", "Ruby-crowned kinglet", 
@@ -29,7 +27,13 @@ shinyUI <- fluidPage(
     "RMBL Phenology"
   ),
   includeHTML("intro.html"),
-  actionButton("tour", "Take a Tour!", styleclass = "primary"),
+  actionBttn(
+    inputId = "tour",
+    label = "Take a tour!", 
+    style = "material-flat",
+    color = "success",
+    size = "sm"
+  ),  
   br(),
   br(),
   
