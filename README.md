@@ -5,7 +5,7 @@ RMBL-phenology is an interactive shiny app that allows any user to visualize the
 ## Prerequisites for opening in Rstudio
 Git and Rstudio ([Instructions](https://resources.github.com/whitepapers/github-and-rstudio/))  
 Installation of the following R packages:
-shiny, magrittr, plotly, shinysky, shinythemes, shinyWidgets, htmltools, cicerone
+shiny, magrittr, plotly, shinythemes, shinyWidgets, htmltools, cicerone
 
 ```
 pkgs <- c('shiny', 'ggridges','plotly', 'shinythemes', 'shinyWidgets', 'htmltools', 'cicerone')
@@ -15,7 +15,6 @@ lapply(pkgs, FUN = function(x) {
     }
   }
 )
-devtools::install_github("AnalytixWare/ShinySky")
 ```
 
 ## Using RMBL-phenology
