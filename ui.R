@@ -5,16 +5,12 @@ library(shiny)
 library(shinythemes)
 library(shinyWidgets)
 library(plotly)
-library(readxl)
 library(htmltools)
-library(shinyBS)
+# library(shinyBS)
 library(magrittr)
 #library(glouton)
 library(cicerone)
 library(shinysky)
-
-
-
 
 species <- c("Yellow-bellied marmot", "Least chipmunk", "American robin", "Steller's jay", 
              "Red-winged blackbird", "Dark-eyed junco", "Northern flicker", "Tree swallow", "Red-naped sapsucker", "Fox sparrow", "Ruby-crowned kinglet", 
@@ -34,13 +30,12 @@ shinyUI <- fluidPage(
   ),
   includeHTML("intro.html"),
   actionButton("tour", "Take a Tour!", styleclass = "primary"),
-  # actionBttn("tour", "Take a Tour!", size = "sm", color = "success", block = TRUE),
   br(),
   br(),
   
   div(id = "viz-wrapper",
     tabsetPanel(
-      tabPanel("vs Year",
+      tabPanel("vs. Year",
               sidebarLayout(
                 sidebarPanel(
                   id = "sidebar",
@@ -70,7 +65,7 @@ shinyUI <- fluidPage(
                     plotlyOutput("plot1")
                   ),
                   div(
-                    id = "stats",
+                    id = "stats1-wrapper",
                     htmlOutput("stats1")
                   ),
                   br(),
@@ -79,7 +74,7 @@ shinyUI <- fluidPage(
               )
       ),
       
-      tabPanel("vs snow conditions", 
+      tabPanel("vs. snow conditions", 
                sidebarLayout(
                  sidebarPanel(
                    div(
@@ -99,13 +94,16 @@ shinyUI <- fluidPage(
                      id = "plot2-wrapper", 
                      plotlyOutput("plot2")
                    ),
-                   htmlOutput("stats2"),
+                   div(
+                     id = "stats2-wrapper",
+                     htmlOutput("stats2")
+                   ),
                    hr()
                  )
                ),
       ),
       
-      tabPanel("vs other weather data",
+      tabPanel("vs. other weather data",
                sidebarLayout(
                  sidebarPanel(
                    selectInput("period3", "Period", c("1974-1999", "2000-2010", "1974-2010")),
