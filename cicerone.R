@@ -18,7 +18,7 @@ guide <- Cicerone$
   step(
     el = "inputs1-wrapper",
     title = "Selecting parameters",
-    description = "This tells you what parameters are depicted on the plot. Be careful with the axes since they can differ between the parameters. Keep them as they are for now"
+    description = "This tells you what parameters are depicted on the plot. Be careful with the axes since they can differ between the parameters. Keep them as they are for now."
   )$
   step(
     el = "period-wrapper",
@@ -48,8 +48,13 @@ guide <- Cicerone$
   step(
     el = "plot2-wrapper",
     title = "vs. Snow conditions plot",
-    description = "In the second tab, the plot shows how the species phenology has shifted in relation to snow conditions. Each point represents a year.
-                  At a quick glance, we can see that the Yellow-bellied marmots are sighted later in the year when the snow are melted later."
+    description = HTML("In the second tab, the plot shows how the species phenology has shifted in relation to snow conditions.<br>
+                       Each point represents a year. At a quick glance, we can see that the Yellow-bellied marmots are sighted later in the year when the snow sticks around until later.")
+  )$
+  step(
+    el = "sidebar-wrapper",
+    title = "Sidebar",
+    description = "The parameters are the same as in the first tab."
   )$
   step(
     el = "stats2-wrapper",
@@ -59,11 +64,6 @@ guide <- Cicerone$
                   As much as 34% of the variation in Yellow-bellied marmots' sighting date is explained by the variation in the snow melt date as well."
   )$
   step(
-    el = "sidebar-wrapper",
-    title = "Sidebar",
-    description = "The parameters are the same as in the first tab."
-  )$
-  step(
     el = "viz-wrapper",
     title = "Next up...",
     description = HTML("Now, let's look at the last tab. Click on <b>vs. other weather data</b>")
@@ -71,6 +71,6 @@ guide <- Cicerone$
   step(
     el = "plot3-wrapper",
     title = "vs. Other weather data plot",
-    description = "In the last tab, the plot shows how the species phenology has shifted in relation to some environmental variables other than snow.
-                  It looks like the Yellow-bellied marmots tend to appear earlier in warmer springs."
+    description = HTML("In the last tab, the plot shows how the species phenology has shifted in relation to some environmental variables other than snow.<br>
+                       It looks like the Yellow-bellied marmots tend to appear earlier in warmer springs.")
   )
