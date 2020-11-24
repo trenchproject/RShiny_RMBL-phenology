@@ -41,7 +41,7 @@ guide <- Cicerone$
   step(
     el = "tabs",
     title = "Next up...",
-    description = HTML("Now, let's move on to the second tab. Click on <b>vs. snow conditions</b>")
+    description = HTML("Now, let's move on to the second tab. Click on <b>vs. snow conditions</b> before hitting next.")
   )$
   step(
     el = "plot2-wrapper",
@@ -64,7 +64,7 @@ guide <- Cicerone$
   step(
     el = "tabs",
     title = "Next up...",
-    description = HTML("Now, let's look at the last tab. Click on <b>vs. other weather data</b>")
+    description = HTML("Now, let's look at the last tab. Click on <b>vs. other weather data</b> and then hit next.")
   )$
   step(
     el = "plot3-wrapper",
