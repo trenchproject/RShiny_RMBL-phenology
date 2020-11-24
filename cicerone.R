@@ -3,7 +3,8 @@ guide <- Cicerone$
   step(
     el = "viz-wrapper",
     title = "Visualization",
-    description = "Welcome to our RMBL phenology visualization tool. Notice there are three tabs on the top. We will go over them one by one. Click next to get started."
+    description = HTML("Welcome to our RMBL phenology visualization tool. Notice there are three tabs on the top. We will go over them one by one. 
+                       Keep it at <b>vs. Year</b> for now and click next to get started.")
   )$
   step(
     el = "plot1-wrapper",
@@ -28,7 +29,7 @@ guide <- Cicerone$
   step(
     el = "trendline",
     title = "Trend line",
-    description = "Clicking here shows and hides trendlines on the plot. Keep it on for now."
+    description = "Clicking here shows and hides trendlines on the plot. Keep it on for now and hit next."
   )$
   step(
     el = "stats1-wrapper",
