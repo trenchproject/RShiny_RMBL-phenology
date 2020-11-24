@@ -9,6 +9,8 @@ library(htmltools)
 library(magrittr)
 #library(glouton)
 library(cicerone)
+library(shinyjs)
+library(shinyBS)
 
 species <- c("Yellow-bellied marmot", "Least chipmunk", "American robin", "Steller's jay", 
              "Red-winged blackbird", "Dark-eyed junco", "Northern flicker", "Tree swallow", "Red-naped sapsucker", "Fox sparrow", "Ruby-crowned kinglet", 
@@ -18,9 +20,9 @@ vars <- c("Mean minimum April temperature (°C)", "Mean maximum April temperatur
 
 
 
-shinyUI <- fluidPage(
+shinyUI <- fluidPage(id = "page",
   use_cicerone(),
-  
+  useShinyjs(),
   theme = shinytheme("united"),
   setBackgroundColor(color = "#F5F5F5"), 
   titlePanel(
@@ -28,12 +30,21 @@ shinyUI <- fluidPage(
   ),
   includeHTML("intro.html"),
   actionBttn(
+    inputId = "reset",
+    label = "Reset", 
+    style = "material-flat",
+    color = "danger",
+    size = "xs"
+  ),
+  bsTooltip("reset", "If you have already changed the variables, reset them to default here before starting the tour."),
+  
+  actionBttn(
     inputId = "tour",
     label = "Take a tour!", 
     style = "material-flat",
     color = "success",
     size = "sm"
-  ),  
+  ), 
   br(),
   br(),
   

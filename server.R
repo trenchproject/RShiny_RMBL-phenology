@@ -24,6 +24,10 @@ shinyServer <- function(input, output, session) {
   
   observeEvent(input$tour, guide$init()$start())
   
+  observeEvent(input$reset, {
+    reset("page")
+  })
+  
   output$plot1 <- renderPlotly({
     validate(
       need(input$snow != "" || input$species != "", "Select a snow condition or a species")
