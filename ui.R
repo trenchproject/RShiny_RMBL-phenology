@@ -24,9 +24,10 @@ shinyUI <- fluidPage(id = "page",
   use_cicerone(),
   useShinyjs(),
   theme = shinytheme("united"),
-  setBackgroundColor(color = "#F5F5F5"), 
+  setBackgroundColor(color = "#C7DAE0"), 
   titlePanel(
-    "RMBL Phenology"
+    div(tags$img(src="TrenchEdLogo.png", height = 150), 
+        "Climate Change and High-altitude Phenology")
   ),
   includeHTML("intro.html"),
   actionBttn(
