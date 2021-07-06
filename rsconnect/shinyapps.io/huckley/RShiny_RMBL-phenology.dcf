@@ -1,0 +1,13 @@
+name: RShiny_RMBL-phenology
+title: RShiny_RMBL-phenology
+username:
+account: huckley
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2691451
+bundleId: 4792935
+url: https://huckley.shinyapps.io/RShiny_RMBL-phenology/
+when: 1625594248.49306
+lastSyncTime: 1625594248.49306
+asMultiple: FALSE
+asStatic: FALSE

@@ -25,6 +25,7 @@ shinyUI <- fluidPage(id = "page",
   useShinyjs(),
   theme = shinytheme("united"),
   setBackgroundColor(color = "#C7DAE0"), 
+  title="High-altitude Phenology",
   titlePanel(
     div(tags$img(src="TrenchEdLogo.png", height = 150), 
         "Climate Change and High-altitude Phenology")
